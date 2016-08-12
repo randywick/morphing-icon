@@ -1,0 +1,187 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<!--
+`morphing-icon`
+Polymer element implementing svg-morpheus
+
+@demo demo/index.html 
+-->
+
+<dom-module id="morphing-icon">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+
+      svg {
+        height: var(--iron-icon-height, 32px);
+        height: var(--iron-icon-width, 32px);
+        fill: var(--iron-icon-fill-color, black);
+        stroke: var(--iron-icon-stroke-color, none);
+      }
+    </style>
+
+    <svg viewbox="0 0 24 24" id="svg"></svg>
+
+  </template>
+
+
+  <script src="../svg-morpheus/compile/minified/svg-morpheus.js"></script>
+
+  <script>
+    'use strict'
+
+
+    var easingFunctions = [
+      'circ-in',
+      'circ-out',
+      'circ-in-out',
+      'cubic-in',
+      'cubic-out',
+      'cubic-in-out',
+      'elastic-in',
+      'elastic-out',
+      'elastic-in-out',
+      'expo-in',
+      'expo-out',
+      'expo-in-out',
+      'linear',
+      'quad-in',
+      'quad-out',
+      'quad-in-out',
+      'quart-in',
+      'quart-out',
+      'quart-in-out',
+      'quint-in',
+      'quint-out',
+      'quint-in-out',
+      'sine-in',
+      'sine-out',
+      'sine-in-out'
+    ]
+
+
+    var rotations = [
+      'clock',
+      'counterclock',
+      'random',
+      'none'
+    ]
+
+
+    Polymer({
+
+      is: 'morphing-icon',
+
+      properties: {
+
+        icon: {
+          type: String,
+          reflectToAttribute: true,
+          observer: '_iconChanged'
+        },
+
+        duration: {
+          type: Number,
+          value: 500
+        },
+
+        easing: {
+          type: String,
+          value: 'quad-in-out',
+          observer: '_easingChanged'
+        },
+
+        rotation: {
+          type: String,
+          value: 'none',
+          observer: '_rotationChanged'
+        }
+
+      },
+
+
+      /* GETTERS AND SETTERS */
+
+      get _options() {
+        return {
+          easing: this.easing,
+          rotation: this.rotation,
+          duration: this.duration
+        }
+      },
+
+
+      /* LIFECYCLE */
+
+      attached() {
+        this.async(this._constructMorpheus, 0)
+      },
+
+
+      /* OBSERVERS */
+
+      _iconChanged(newIcon, oldIcon) {
+        if (oldIcon && oldIcon !== newIcon) {
+          
+        }
+      },
+
+
+      _easingChanged(newEasing, oldEasing) {
+        if (easingFunctions.indexOf(newEasing) === -1 && oldEasing) {
+          this.easing = oldEasing
+        }
+      },
+
+
+      _rotationChanged(newRotation, oldRotation) {
+        if (rotations.indexOf(newRotation) === -1 && oldRotation) {
+          this.easing = oldRotation
+        }
+      },
+
+
+      /* PUBLIC API */
+
+      morphTo(icon) {
+        var callback = function() {
+          this.fire.bind('morphing-icon:morphed')
+        }
+
+        this.icon.to(icon, this._options, callback.bind(this))
+      },
+
+
+      /* PRIVATE API */
+
+      /**
+       * Upgrades the svg with the Morpheus constructor
+       */
+      _constructMorpheus() {
+        var svg = this.$.svg
+
+        // fetch any child iron-icon elements and build the svg
+        Array.from(Polymer.dom(this).childNodes)
+          .filter(function(el) {
+            return el instanceof HTMLElement
+          })
+
+          .forEach(function(el) {
+            var g = el.querySelector('g')
+            g.id = el.icon
+
+            svg.appendChild(g)
+          }, this)
+
+        var callback = function() {
+          this.fire('morphing-icon:ready')
+        }
+
+        this.icon = new SVGMorpheus(svg, this._options, callback.bind(this))
+      },
+
+    })
+  </script>
+</dom-module>
