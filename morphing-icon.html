@@ -99,6 +99,10 @@ Polymer element implementing svg-morpheus
           observer: '_rotationChanged'
         }
 
+        _icon: {
+          type: Object
+        }
+
       },
 
 
@@ -150,7 +154,7 @@ Polymer element implementing svg-morpheus
           this.fire.bind('morphing-icon:morphed')
         }
 
-        this.icon.to(icon, this._options, callback.bind(this))
+        this._icon.to(icon, this._options, callback.bind(this))
       },
 
 
@@ -182,7 +186,7 @@ Polymer element implementing svg-morpheus
         var options = Object.assign({}, this._options)
         options.icon = this.icon
 
-        this.icon = new SVGMorpheus(svg, options, callback.bind(this))
+        this._icon = new SVGMorpheus(svg, options, callback.bind(this))
       },
 
     })
