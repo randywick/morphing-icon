@@ -128,7 +128,7 @@ Polymer element implementing svg-morpheus
 
       _iconChanged(newIcon, oldIcon) {
         if (oldIcon && oldIcon !== newIcon) {
-          
+          this.morphTo(newIcon)
         }
       },
 
