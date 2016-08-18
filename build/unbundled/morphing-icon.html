@@ -1,13 +1,8 @@
-<link rel="import" href="../polymer/polymer.html">
+<html><head><link rel="import" href="../polymer/polymer.html">
 
-<!--
-`morphing-icon`
-Polymer element implementing svg-morpheus
 
-@demo demo/index.html 
--->
 
-<dom-module id="morphing-icon">
+</head><body><dom-module id="morphing-icon">
   <template>
     <style>
       :host {
@@ -22,7 +17,7 @@ Polymer element implementing svg-morpheus
       }
     </style>
 
-    <svg viewbox="0 0 24 24" id="svg"></svg>
+    <svg viewBox="0 0 24 24" id="svg"></svg>
 
   </template>
 
@@ -179,12 +174,10 @@ Polymer element implementing svg-morpheus
           this.fire('morphing-icon:ready')
         }
 
-        var options = Object.assign({}, this._options)
-        options.icon = this.icon
-
-        this.icon = new SVGMorpheus(svg, options, callback.bind(this))
+        this.icon = new SVGMorpheus(svg, this._options, callback.bind(this))
       },
 
     })
   </script>
 </dom-module>
+</body></html>
