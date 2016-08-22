@@ -182,7 +182,10 @@ Polymer element implementing svg-morpheus
           })
 
           .forEach(function(el) {
-            var g = el.querySelector('g')
+            // can't use normal querySelector on el here, as el is encapsulated
+            // in shadow dom
+            var rootDom = Polymer.dom(el.root)
+            var g = rootDom.querySelector('g')
             g.id = el.icon
 
             svg.appendChild(g)
