@@ -149,12 +149,21 @@ Polymer element implementing svg-morpheus
 
       /* PUBLIC API */
 
+      /**
+       * Morphs the icon, firing an event upon completion
+       * 
+       * @param  {String} icon the icon into which the element should morph
+       * @return {Promise}     Resolves after the icon is completed morphing.
+       *                       Note: this will never reject and contains no
+       *                       error handling
+       */
       morphTo(icon) {
-        var callback = function() {
-          this.fire.bind('morphing-icon:morphed')
-        }
-
-        this._icon.to(icon, this._options, callback.bind(this))
+        return new Promise((function(resolve) {
+          this._icon.to(icon, this._options, (function() {
+            this.fire('morphing-icon:morphed')
+            resolve()
+          }).bind(this))
+        }).bind(this))
       },
 
 
